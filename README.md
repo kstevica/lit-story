@@ -85,7 +85,7 @@ python generate_story.py --checkpoint_dir checkpoints/togethercomputer/RedPajama
 ```bash
 python generate_story.py --use_llama=True \
   --checkpoint_dir checkpoints//llama/open-7B/lit-llama.pth \
-  --tokenizer_path ../lit-parrot/checkpoints/llama/tokenizer.model \
+  --tokenizer_path checkpoints/llama/tokenizer.model \
   --adapter_path path/to/your/adapter 
 ```
 
