@@ -14,7 +14,8 @@ import torch
 # import pyperclip
 import textwrap
 from datetime import datetime
-import readline
+if sys.platform.startswith('win')==False:
+    import readline
 import asyncio
 import websockets
 import ssl
@@ -22,7 +23,7 @@ import ssl
 total_active_count = 0
 
 def main(
-    adapter_path: Path = Path("./"),
+    adapter_path: Path = None,
     checkpoint_dir: Path = Path(f"./"),
     quantize: Optional[str] = None,
     use_alpaca: bool = False,
@@ -71,9 +72,10 @@ def main(
         with lazy_load(checkpoint_dir / "lit_model.pth") as pretrained_checkpoint:
             model.load_state_dict(pretrained_checkpoint, strict=False)
         tokenizer = Tokenizer(checkpoint_dir / "tokenizer.json", checkpoint_dir / "tokenizer_config.json")
-        print("Loading adapter...", file=sys.stderr)
-        adapter_checkpoint = torch.load(adapter_path, map_location=lambda storage, loc: storage)
-        model.load_state_dict(adapter_checkpoint, strict=False)
+        if adapter_path != None:
+            print("Loading adapter...", file=sys.stderr)
+            adapter_checkpoint = torch.load(adapter_path, map_location=lambda storage, loc: storage)
+            model.load_state_dict(adapter_checkpoint, strict=False)
 
     
     if use_llama:
@@ -90,9 +92,10 @@ def main(
         print('Model loaded, transfering to GPU memory...')
         model.load_state_dict(checkpoint, strict=False)
         tokenizer = Tokenizer(tokenizer_path)
-        print("Loading adapter...", file=sys.stderr)
-        adapter_checkpoint = torch.load(adapter_path, map_location=lambda storage, loc: storage)
-        model.load_state_dict(adapter_checkpoint, strict=False)
+        if adapter_path != None:
+            print("Loading adapter...", file=sys.stderr)
+            adapter_checkpoint = torch.load(adapter_path, map_location=lambda storage, loc: storage)
+            model.load_state_dict(adapter_checkpoint, strict=False)
 
     print(f"Time to load: {time.time() - t0:.02f} seconds.", file=sys.stderr)
 

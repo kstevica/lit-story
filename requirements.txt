@@ -4,3 +4,8 @@ tokenizers
 jsonargparse[signatures]  # CLI
 bitsandbytes  # quantization.py
 zstandard  # prepare_redpajama.py
+textwrap
+asyncio
+websockets
+ssl
+readline
